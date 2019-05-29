@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Stop watch</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Source+Code+Pro');
+
+    .stop-watch {
+      font-family: 'Source Code Pro', monospace;
+      text-align: center;
+      font-size: 3em;
+      padding: 30px;
+    }
+
+    .control {
+      width: 300px;
+      padding: 5px;
+      margin-top: 15px;
+      font-size: 36px;
+      font-weight: bold;
+      border: 2px solid #f44336;
+      border-radius: 4px;
+      cursor: pointer;
+      outline: none;
+    }
+
+    .control:hover {
+      background: #f44336;
+      color: aliceblue;
+    }
+  </style>
+  <title>Stop watch</title>
+</head>
+<body>
+  <div class="stop-watch">
+    <div class="display">00:00:00</div>
+    <button class="control">Start</button>
+  </div>
+  <script>
+    const $control = document.querySelector('.control');
+    const $display = document.querySelector('.display');
+
+    const Timer = (function () {
+      let sec = 0;
+      let time;
+
+      function frame() {
+        sec += 1;
+        const strSec = sec + '';
+
+
+        $display.innerHTML = sec < 100 ? `00:00:${strSec}` : sec > 100 && sec < 1000 ? `00:0${strSec.substring(0, 1)}:${strSec.substring(strSec.length - 2, strSec.length)}` : sec > 1000 && sec < 10000 ? `00:${strSec.substring(0, 2)}:${strSec.substring(strSec.length - 2, strSec.length)}` : '';
+        console.log(strSec);
+      }
+
+      return {
+        stop() {
+          clearInterval(time);
+        },
+        start() {
+          time = setInterval(frame, 10);
+        }
+      };
+    }());
+
+
+    $control.addEventListener('click', function (e) {
+      e.target.textContent = e.target.textContent === 'Start' ? 'Stop' : 'Start';
+
+      if (e.target.textContent === 'Stop') Timer.start();
+      if (e.target.textContent === 'Start') Timer.stop();
+    });
+  </script>
+</body>
+</html>
