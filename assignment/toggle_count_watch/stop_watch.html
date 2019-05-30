@@ -44,16 +44,33 @@
     const $display = document.querySelector('.display');
 
     const Timer = (function () {
+      let msec = 100;
       let sec = 0;
+      let min = 0;
       let time;
 
       function frame() {
-        sec += 1;
-        const strSec = sec + '';
+        const strMs = msec + '';
 
+        if (min < 10) {
+          msec++;
+          $display.innerHTML = sec < 10 ? `0${min}:0${sec}:${strMs.substring(1, 3)}` : `0${min}:${sec}:${strMs.substring(1, 3)}`;
+        }
 
-        $display.innerHTML = sec < 100 ? `00:00:${strSec}` : sec > 100 && sec < 1000 ? `00:0${strSec.substring(0, 1)}:${strSec.substring(strSec.length - 2, strSec.length)}` : sec > 1000 && sec < 10000 ? `00:${strSec.substring(0, 2)}:${strSec.substring(strSec.length - 2, strSec.length)}` : '';
-        console.log(strSec);
+        if (min >= 10) {
+          msec++;
+          $display.innerHTML = sec >= 10 ? `${min}:${sec}:${strMs.substring(1, 3)}` : `${min}:0${sec}:${strMs.substring(1, 3)}`;
+        }
+
+        if (msec === 200) {
+          sec++;
+          msec = 100;
+        }
+
+        if (sec === 60) {
+          sec = 0;
+          min++;
+        }
       }
 
       return {
@@ -65,7 +82,6 @@
         }
       };
     }());
-
 
     $control.addEventListener('click', function (e) {
       e.target.textContent = e.target.textContent === 'Start' ? 'Stop' : 'Start';
