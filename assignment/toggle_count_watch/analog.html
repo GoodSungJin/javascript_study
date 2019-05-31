@@ -22,8 +22,6 @@
       left: 50%;
       width: 1px;
       height: 100px;
-      /* 자바스크립트에 의해 덮어써진다. */
-      /* transform: translate3d(-50%, 0, 0); */
       transform-origin: 100% 100%;
     }
 
@@ -72,11 +70,39 @@
   </div>
 
   <script>
-    if(xhr.status === 200) {
-      
+    class Clock {
+      constructor() {
+        this.$digital = document.querySelector('.digital-clock');
 
+        this.$analogHour = document.querySelector('.hour');
+        this.$analogMin = document.querySelector('.minute');
+        this.$analogSec = document.querySelector('.second');
+
+        this.hour = new Date().getHours();
+        this.min = new Date().getMinutes();
+        this.sec = new Date().getSeconds();
+      }
+
+      handleTime() {
+        this.hour = new Date().getHours();
+        this.min = new Date().getMinutes();
+        this.sec = new Date().getSeconds();
+      }
+
+      displayTime() {
+        this.$digital.innerHTML = `${this.hour}:${this.min}:${this.sec}`;
+        this.$analogHour.style.transform = `rotate(${(this.hour % 12) * 30 + (this.min * 6 + (this.sec * 6 / 60) / 12)}deg)`;
+        this.$analogMin.style.transform = `rotate(${this.min * 6 + (this.sec * 6 / 60)}deg)`;
+        this.$analogSec.style.transform = `rotate(${this.sec * 6}deg)`;
+      }
     }
 
+    const digital = new Clock();
+
+    setInterval(() => {
+      digital.handleTime();
+      digital.displayTime();
+    }, 1000);
   </script>
 </body>
 </html>
