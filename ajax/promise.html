@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+  </head>
+  <body>
+    <pre class="result"></pre>
+    <script>
+      const $result = document.querySelector('.result');
+      const render = content => $result.innerHTML = content;
+
+      const promiseAjax = function (method, url, callback, payload) {
+        return new Promise((resolve, reject) => {
+          const xhr = new XMLHttpRequest();
+
+          xhr.open(method, url);
+          xhr.setRequestHeader('Content-Type', 'application/json');
+          xhr.send(JSON.stringify(payload));
+
+          xhr.onreadystatechange = function () {
+            if (xhr.readyState !== XMLHttpRequest.DONE) return;
+
+            if (xhr.status >= 200 && xhr.status < 400) {
+              resolve(xhr.response);
+            } else {
+              reject(new Error(xhr.status));
+            }
+          };
+        });
+      };
+
+      const promise = promiseAjax('GET', 'http://localhost:3000/todos');
+      const promise = promiseAjax('POST', 'http://localhost:3000/todos', {id: 4, content: 'c', completed: false});
+      const promise = promiseAjax('PUT', 'http://localhost:3000/todos/4', {id: 4, content: 'java', completed: true});
+      const promise = promiseAjax('PATCH', 'http://localhost:3000/todos/4', {completed: false});
+      const promise = promiseAjax('DELETE', 'http://localhost:3000/todos/4');
+
+      promise
+        .then(render)
+        .catch(console.error);
+    </script>
+  </body>
+</html>
