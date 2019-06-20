@@ -24,6 +24,7 @@
   margin-bottom: 30px;
 }
 
+
 /* .input-todo  */
 .input-todo {
   display: block;
@@ -68,6 +69,7 @@
 }
 
 .todo-list {}
+
 
 /* .todo-item */
 .todo-item {
