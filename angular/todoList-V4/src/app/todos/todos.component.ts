@@ -14,8 +14,6 @@ import { Tabs } from '../interface-tabs';
       <app-list-todo [todosData]="Todos" (toggleCheck)="changeCk($event)"></app-list-todo>
       <app-footer-todo (cheakAll)="checkAll($event)" (removeTodo)="removeTodo()" [countActive]="countActive" [countComplete]="countComplete"></app-footer-todo>
     </div>
-    <pre>{{ todos | json }}</pre>
-    <pre>{{ tabs | json }}</pre>
   `,
   styleUrls: ['./todos.component.css'],
 
