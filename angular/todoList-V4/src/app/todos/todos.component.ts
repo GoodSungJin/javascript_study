@@ -1,23 +1,42 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 import { Todo } from '../interface-todo';
-import { Tabs } from '../interface-tabs';
-
+import { TabStates } from '../interface-tabs';
 
 @Component({
   selector: 'app-todos',
   template: `
     <div class="container">
       <h1 class="title">Todos</h1>
-      <div class="ver">4.0</div>
-      <app-input-todo (addTodo)="addTodo($event)"></app-input-todo>
-      <app-nav-todo [tabsData]="tabs" [tabStateData]="tabState" (changeTabState)="tabState = $event"></app-nav-todo>
-      <app-list-todo [todosData]="Todos" (toggleCheck)="changeCk($event)"></app-list-todo>
-      <app-footer-todo (cheakAll)="checkAll($event)" (removeTodo)="removeTodo()" [countActive]="countActive" [countComplete]="countComplete"></app-footer-todo>
+      <div class="ver">5.0</div>
+
+      <input class="input-todo" placeholder="What needs to be done?" autofocus (keyup.enter)="addTodo($event.target)">
+
+      <ul class="nav">
+        <li *ngFor="let tab of tabs" [class.active]="tab === tabState" (click)="tabState = tab">{{tab}}</li>
+      </ul>
+
+      <ul class="todos" *ngIf="todos; else loading">
+        <li class="todo-item" *ngFor="let todo of todos | todosFilter : tabState">
+          <input class="custom-checkbox" type="checkbox" id="ck-{{todo.id}}" [checked]="todo.completed" (change)="changeCk(todo.id)">
+          <label for="ck-{{todo.id}}">{{todo.content}}</label>
+          <i class="remove-todo far fa-times-circle" (click)="deleteTodo(todo.id)"></i>
+        </li>
+      </ul>
+      <ng-template #loading>Loading...</ng-template>
+
+      <div class="footer">
+      <div class="complete-all">
+        <input class="custom-checkbox" type="checkbox" id="ck-complete-all" [checked]="checkCheck" (change)="checkAll($event.target.checked)">
+        <label for="ck-complete-all">Mark all as complete</label>
+      </div>
+      <div class="clear-completed">
+        <button class="btn" (click)="removeTodo()">Clear completed (<span class="completed-todos">{{countComplete}}</span>)
+        </button>
+        <strong class="active-todos">{{countActive}}</strong> items left
+      </div>
     </div>
   `,
-  styleUrls: ['./todos.component.css'],
-
-  encapsulation: ViewEncapsulation.None
+  styleUrls: ['./todos.component.css']
 })
 export class TodosComponent {
   todos: Todo[] = [
@@ -26,20 +45,9 @@ export class TodosComponent {
     { id: 3, content: 'Javascript', completed: false }
   ];
 
-  tabs: Tabs[] = [
-    { content: 'All' },
-    { content: 'Active' },
-    { content: 'Complete' }
-  ];
+  tabs: TabStates[] = ['All', 'Active', 'Complete'];
 
   tabState = 'All';
-
-  get Todos() {
-    if(this.tabState === 'All') return this.todos;
-    else if(this.tabState === 'Active') return this.todos.filter(todo => todo.completed);
-    return this.todos.filter(todo => !todo.completed);
-  }
-
 
   // todo 추가
   addTodo(elem: HTMLInputElement) {
@@ -80,5 +88,13 @@ export class TodosComponent {
   // completed 삭제
   removeTodo() {
     this.todos = this.todos.filter(todo => !todo.completed);
+  }
+
+  deleteTodo(id: number) {
+    this.todos = this.todos.filter(todo => id !== todo.id);
+  }
+
+  get checkCheck() {
+    return this.todos.every(todo => todo.completed);
   }
 }

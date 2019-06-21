@@ -1,3 +1,1 @@
-export interface Tabs {
-  content: string;
-}
+export type TabStates = 'All' | 'Complete' | 'Active';
