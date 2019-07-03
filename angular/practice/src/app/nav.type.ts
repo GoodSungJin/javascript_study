@@ -1,0 +1,1 @@
+export type navState = "All" | "Completed" | "Active";

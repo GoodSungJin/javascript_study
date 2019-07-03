@@ -1,0 +1,3 @@
+<ul class="nav" >
+  <li *ngFor="let state of navStatesData" (click)="sendState.emit(state)" [class.active]="state === navStateData">{{state}}</li>
+</ul>

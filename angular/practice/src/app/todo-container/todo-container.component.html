@@ -1,0 +1,16 @@
+<div class="container">
+  <h1 class="title">Todos</h1>
+  <div class="ver">연습</div>
+  <app-todo-form (add)="addTodo($event)"></app-todo-form>
+  <app-todo-nav [navStateData]="navState" [navStatesData]="navStates" (sendState)="navState = $event"></app-todo-nav>
+  <app-todo-list [navStateData]="navState" [todosData]="todos" (removeTodo)="removeTodo($event)" (toggleCheck)="toggleCheck($event)"></app-todo-list>
+  <app-todo-footer 
+    (toggleAll)="toggleAll($event)" 
+    (removeCompleted)="removeCompleted()" 
+    [countCompleted]="countCompleted()"
+    [countActive]="countActive()"
+    [isAllChecked]="isAllChecked()"
+  >
+  </app-todo-footer>
+</div>
+<pre>{{ todos | json }}</pre>

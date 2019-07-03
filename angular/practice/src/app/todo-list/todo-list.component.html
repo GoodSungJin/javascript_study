@@ -1,0 +1,7 @@
+<ul class="todos">
+  <li class="todo-item" *ngFor="let todo of todosData | todoFilter: navStateData">
+    <input class="custom-checkbox" type="checkbox" id="ck-{{todo.id}}" (change)="toggleCheck.emit(todo.id)" [checked]="todo.completed">
+    <label for="ck-{{todo.id}}">{{todo.content}}</label>
+    <i class="remove-todo far fa-times-circle" (click)="removeTodo.emit(todo.id)"></i>
+  </li>
+</ul>
